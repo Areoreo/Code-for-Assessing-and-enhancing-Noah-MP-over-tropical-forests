@@ -27,6 +27,7 @@ An LSTM neural network-based rapid parameter calibration system for the Noah-MP 
 Before you start, some prerequisites should be set up first:
 
 - Prepare your observation data in this path './data/obs/'
+- Prepare forcing data at your site for the Noah-MP in an individual directory and set up the data path in './noahmp/point_run/namelist.hrldas'
 - './noahmp/point_run/hrldas.exe' may not be compiled to be able to run in your environment. Please compile and get your own hrldas.exe and replace './noahmp/point_run/hrldas.exe' with yours.
 
 ```bash
