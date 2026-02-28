@@ -9,9 +9,9 @@
 #          2. Expert-calibrated parameters  
 #          3. Default parameters
 #
-# Usage: bash 07_calibration_validation.sh [CALIBRATION_ID] [OPTIONS]
+# Usage: bash 06_calibration_validation.sh [CALIBRATION_ID] [OPTIONS]
 #
-# Example: bash 07_calibration_validation.sh calibration_1 --obs_file data/obs/Panama_BCI_obs_2015-07-30_2016-07-29.csv
+# Example: bash 06_calibration_validation.sh calibration_1 --obs_file data/obs/Panama_BCI_obs_2015-07-30_2016-07-29.csv
 ####################################################################################
 
 set -e  # Exit on error
@@ -57,16 +57,16 @@ Options:
 
 Examples:
     # Basic usage
-    bash 07_calibration_validation.sh calibration_1
-    
+    bash 06_calibration_validation.sh calibration_1
+
     # Custom observation file
-    bash 07_calibration_validation.sh calibration_1 --obs_file data/obs/custom_obs.csv
-    
+    bash 06_calibration_validation.sh calibration_1 --obs_file data/obs/custom_obs.csv
+
     # Validate specific variables
-    bash 07_calibration_validation.sh calibration_1 --variables "ET GPP"
-    
+    bash 06_calibration_validation.sh calibration_1 --variables "ET GPP"
+
     # Skip default parameter run
-    bash 07_calibration_validation.sh calibration_1 --skip_default
+    bash 06_calibration_validation.sh calibration_1 --skip_default
 
 EOF
     exit 1
@@ -388,7 +388,7 @@ fi
 # Step 5: Run validation analysis
 echo "[INFO] ========== STEP 5: Run Validation Analysis =========="
 
-python3 "${BASE_DIR}/07_calibration_validation.py" \
+python3 "${BASE_DIR}/06_calibration_validation.py" \
     --obs "${OBS_FILE}" \
     --emulator_output "${EMULATOR_CSV}" \
     --expert_output "${EXPERT_CSV}" \

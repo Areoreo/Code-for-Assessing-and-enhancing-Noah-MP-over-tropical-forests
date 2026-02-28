@@ -233,7 +233,7 @@ if [ "${SKIP_CALIBRATION}" = false ]; then
     print_info "Using differential evolution optimizer"
     print_info "Max iterations: ${MAX_ITER}, Population size: ${POPSIZE}"
     
-    python3 06_calibration_applying_emulator_multiple_runs.py \
+    python3 05_calibration_applying_emulator_multiple_runs.py \
         --model_dir "${MODEL_DIR}" \
         --forcing data/raw/forcing/forcing_PSO_daily_calibration.nc \
         --obs "${OBS_CALIBRATION}" \
@@ -438,7 +438,7 @@ if [ "${SKIP_ANALYSIS}" = false ]; then
         fi
         
         # Run enhanced validation analysis (PSO specific observation file)
-        python3 07_calibration_validation_enhanced.py \
+        python3 06_calibration_validation.py \
             --obs "${OBS_DIR}/PSO_obs_all_combined_30min.csv" \
             --emulator_output "${VALIDATION_OUTPUT_DIR}/emulator_output.csv" \
             --expert_output "${VALIDATION_OUTPUT_DIR}/expert_output.csv" \

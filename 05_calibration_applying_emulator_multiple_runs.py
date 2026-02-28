@@ -1056,7 +1056,7 @@ def main():
 Example usage:
 
   # Run 5 independent calibrations for uncertainty quantification
-  python 06_calibration_applying_emulator.py \\
+  python 05_calibration_applying_emulator_multiple_runs.py \\
     --model_dir results_forward_comprehensive/AttentionLSTM_20251116_171820_dim-512_layer-2 \\
     --forcing data/raw/forcing/forcing_sample_1.nc \\
     --obs data/obs/Panama_BCI_obs_2015-07-30_2016-07-29.csv \\
@@ -1066,7 +1066,7 @@ Example usage:
 
   # Run with custom weights for target variables (LH=1.0, HFX=2.0, SOIL_M=1.5)
   # This gives HFX twice the importance of LH in the loss function
-  python 06_calibration_applying_emulator.py \\
+  python 05_calibration_applying_emulator_multiple_runs.py \\
     --model_dir results_forward_comprehensive/AttentionLSTM_20251116_171820_dim-512_layer-2 \\
     --forcing data/raw/forcing/forcing_sample_1.nc \\
     --obs data/obs/Panama_BCI_obs_2015-07-30_2016-07-29.csv \\
@@ -1075,7 +1075,7 @@ Example usage:
     --num_calibration 5
 
   # Use BIAS as loss function instead of NRMSE
-  python 06_calibration_applying_emulator.py \\
+  python 05_calibration_applying_emulator_multiple_runs.py \\
     --model_dir results_forward_comprehensive/AttentionLSTM_20251116_171820_dim-512_layer-2 \\
     --forcing data/raw/forcing/forcing_sample_1.nc \\
     --obs data/obs/Panama_BCI_obs_2015-07-30_2016-07-29.csv \\
@@ -1084,7 +1084,7 @@ Example usage:
     --num_calibration 5
 
   # Use combined loss (NRMSE + NBIAS) with custom weights
-  python 06_calibration_applying_emulator.py \\
+  python 05_calibration_applying_emulator_multiple_runs.py \\
     --model_dir results_forward_comprehensive/AttentionLSTM_20251116_171820_dim-512_layer-2 \\
     --forcing data/raw/forcing/forcing_sample_1.nc \\
     --obs data/obs/Panama_BCI_obs_2015-07-30_2016-07-29.csv \\
@@ -1094,7 +1094,7 @@ Example usage:
     --num_calibration 5
 
   # Run 20 independent calibrations for robust parameter distribution
-  python 06_calibration_applying_emulator.py \\
+  python 05_calibration_applying_emulator_multiple_runs.py \\
     --model_dir results_forward_comprehensive/AttentionLSTM_20251116_171820_dim-512_layer-2 \\
     --forcing data/raw/forcing/forcing_sample_1.nc \\
     --obs data/obs/Panama_BCI_obs_2015-07-30_2016-07-29.csv \\
@@ -1103,7 +1103,7 @@ Example usage:
     --max_iter 100
 
   # Calibrate specific parameters with 10 independent runs
-  python 06_calibration_applying_emulator.py \\
+  python 05_calibration_applying_emulator_multiple_runs.py \\
     --model_dir results_forward_comprehensive/AttentionLSTM_20251116_171820_dim-512_layer-2 \\
     --forcing data/raw/forcing/forcing_sample_1.nc \\
     --obs data/obs/Panama_BCI_obs_2015-07-30_2016-07-29.csv \\

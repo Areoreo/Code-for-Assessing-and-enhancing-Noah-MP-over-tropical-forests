@@ -29,6 +29,9 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator, ScalarFormatter
 
+import sys as _sys
+import os as _os
+_sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '..'))
 from lstm_model_forward import LSTMForwardPredictor, BiLSTMForwardPredictor, AttentionLSTMForwardPredictor
 import config_forward_comprehensive as config
 

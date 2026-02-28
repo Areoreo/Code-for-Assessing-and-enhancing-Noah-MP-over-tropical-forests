@@ -1,158 +1,166 @@
 # LSTM Emulator for Noah-MP Calibration
 
-基于LSTM神经网络的Noah-MP陆面模型快速参数校准系统。
+An LSTM neural network-based rapid parameter calibration system for the Noah-MP land surface model.
 
-## 工作流概览
+## Workflow Overview
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                     run_model_training.sh                           │
-│  1. 生成参数样本 (LHS)                                               │
-│  2. 提取forcing数据 (full/calibration/validation时段)               │
-│  3. 运行Noah-MP (1000组参数 × 全时段)                                │
-│  4. 预处理数据 (calibration时段)                                     │
-│  5. 训练LSTM emulator                                               │
+│  1. Generate parameter samples (LHS)                                │
+│  2. Extract forcing data (full/calibration/validation periods)      │
+│  3. Run Noah-MP (1000 parameter sets × full period)                 │
+│  4. Preprocess data (calibration period)                            │
+│  5. Train LSTM emulator                                             │
 └─────────────────────────────────────────────────────────────────────┘
                                     ↓
 ┌─────────────────────────────────────────────────────────────────────┐
 │                       run_calibration.sh                            │
-│  1. 使用emulator进行参数校准 (calibration时段)                       │
-│  2. 用校准参数运行Noah-MP验证 (全时段)                               │
-│  3. 分析并绘图 (区分calibration/validation时段)                      │
+│  1. Calibrate parameters using emulator (calibration period)        │
+│  2. Run Noah-MP validation with calibrated parameters (full period) │
+│  3. Analyze and plot results (calibration/validation periods)       │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-## 快速开始
+## Quick Start
 
 ```bash
 cd /home/petrichor/ymwang/snap/Emulator-based_calibration/calibration-BCI
 
-# 完整模型训练流程
+# Full model training workflow
 bash run_model_training.sh --samples 1000 --parallel 4
 
-# 完整校准流程
+# Full calibration workflow
 bash run_calibration.sh --num_calibration 10 --max_iter 100
 ```
 
-## 时间范围配置
+## Time Range Configuration
 
-在 `config_forward_comprehensive.py` 中定义：
+Defined in `config_forward_comprehensive.py`:
 
-| 时段 | 范围 | 用途 |
-|------|------|------|
-| FULL | 2015-07-30 ~ 2017-07-30 | Noah-MP运行、验证 |
-| CALIBRATION | 2015-07-30 ~ 2016-07-29 | emulator训练、参数校准 |
-| VALIDATION | 2016-07-30 ~ 2017-07-30 | 独立验证 |
+| Period      | Range                   | Purpose                                  |
+| ----------- | ----------------------- | ---------------------------------------- |
+| FULL        | 2015-07-30 ~ 2017-07-30 | Noah-MP runs, validation                 |
+| CALIBRATION | 2015-07-30 ~ 2016-07-29 | Emulator training, parameter calibration |
+| VALIDATION  | 2016-07-30 ~ 2017-07-30 | Independent validation                   |
 
-## 详细步骤
+## Detailed Steps
 
-### 模型训练 (`run_model_training.sh`)
+### Model Training (`run_model_training.sh`)
 
 ```bash
-# 完整运行
+# Full run
 bash run_model_training.sh
 
-# 跳过已完成步骤
+# Skip completed steps
 bash run_model_training.sh --skip-param-gen --skip-forcing
 bash run_model_training.sh --skip-noahmp
 bash run_model_training.sh --skip-preprocess --skip-train
 
-# 可选参数
---samples N      # 参数样本数 (默认1000)
---parallel N     # 并行数 (默认4)
+# Optional parameters
+--samples N      # Number of parameter samples (default: 1000)
+--parallel N     # Number of parallel jobs (default: 4)
 ```
 
-**输出文件：**
-- `data/raw/param/noahmp_param_sets.txt` - 参数样本
-- `data/raw/forcing/forcing_panama_*.nc` - forcing数据
-- `data/raw/sim_results/sample_*/` - Noah-MP输出
-- `data/processed_data_forward_comprehensive.pkl` - 训练数据
-- `results_forward_comprehensive/*/` - 训练好的模型
+**Output files:**
 
-### 参数校准 (`run_calibration.sh`)
+- `data/raw/param/noahmp_param_sets.txt` - Parameter samples
+- `data/raw/forcing/forcing_panama_*.nc` - Forcing data
+- `data/raw/sim_results/sample_*/` - Noah-MP outputs
+- `data/processed_data_forward_comprehensive.pkl` - Training data
+- `results_forward_comprehensive/*/` - Trained model
+
+### Parameter Calibration (`run_calibration.sh`)
 
 ```bash
-# 完整运行
+# Full run
 bash run_calibration.sh
 
-# 指定模型目录
+# Specify model directory
 bash run_calibration.sh --model_dir results_forward_comprehensive/AttentionLSTM_xxx/
 
-# 调整校准参数
+# Adjust calibration parameters
 bash run_calibration.sh --num_calibration 20 --max_iter 200
 
-# 跳过步骤
-bash run_calibration.sh --skip-calibration  # 使用已有校准结果
-bash run_calibration.sh --skip-noahmp       # 跳过验证运行
+# Skip steps
+bash run_calibration.sh --skip-calibration  # Use existing calibration results
+bash run_calibration.sh --skip-noahmp       # Skip validation runs
 ```
 
-**输出文件：**
-- `calibration_results/*/calibration_1/` - 校准结果
-  - `calibrated_parameters.csv` - 校准后参数
-  - `calibration_result.json` - 详细metrics
-- `validation_results/*/` - 验证结果
-  - `validation_metrics_by_period.csv` - 分时段metrics
-  - `timeseries_*.png/pdf` - 时序对比图
-  - `scatter_*.png/pdf` - 散点图
-  - `metrics_*.png/pdf` - metrics对比图
+**Output files:**
 
-## SATDK参数处理
+- `calibration_results/*/calibration_1/` - Calibration results
+  - `calibrated_parameters.csv` - Calibrated parameters
+  - `calibration_result.json` - Detailed metrics
+- `validation_results/*/` - Validation results
+  - `validation_metrics_by_period.csv` - Metrics by period
+  - `timeseries_*.png/pdf` - Time series comparison plots
+  - `scatter_*.png/pdf` - Scatter plots
+  - `metrics_*.png/pdf` - Metrics comparison plots
 
-SATDK参数在不同阶段使用不同形式：
+## SATDK Parameter Handling
 
-| 阶段 | 值形式 | 说明 |
-|------|--------|------|
-| 参数样本生成 | 原始值 | `[8.9e-06, 5e-04]` |
-| TBL文件生成 | 原始值 | 直接写入Noah-MP配置 |
-| emulator训练 | log10值 | 自动转换 `→ [-5.05, -3.3]` |
-| 参数校准 | log10值 | 使用`SATDK(log)` bounds |
-| 校准结果转换 | log→原始 | `10^x` 转换回物理值 |
+The SATDK parameter uses different forms at different stages:
 
-**value_bounds.csv 格式：**
+| Stage                         | Value Form  | Description                               |
+| ----------------------------- | ----------- | ----------------------------------------- |
+| Parameter sample generation   | Raw value   | `[8.9e-06, 5e-04]`                        |
+| TBL file generation           | Raw value   | Written directly to Noah-MP configuration |
+| Emulator training             | log10 value | Automatically converted `→ [-5.05, -3.3]` |
+| Parameter calibration         | log10 value | Uses `SATDK(log)` bounds                  |
+| Calibration result conversion | log→raw     | `10^x` conversion back to physical value  |
+
+**value_bounds.csv format:**
+
 ```csv
 variable,Lower bound,Upper bound
 SATDK,8.90E-06,5.00E-04
 SATDK(log),-5.05,-3.3
 ```
 
-## 单独运行各步骤
+## Running Individual Steps
 
-### 生成参数样本
+### Generate Parameter Samples
+
 ```bash
 cd noahmp/TBL_generator
 python3 generate_samples.py
 ```
 
-### 提取forcing数据
+### Extract Forcing Data
+
 ```bash
-# 全时段
+# Full period
 python3 extract_forcing_data.py --daily \
     --start_date 2015-07-30 --end_date 2017-07-30 \
     --output data/raw/forcing/forcing_panama_daily_full.nc
 
-# 校准时段
+# Calibration period
 python3 extract_forcing_data.py --daily \
     --start_date 2015-07-30 --end_date 2016-07-29 \
     --output data/raw/forcing/forcing_panama_daily_calibration.nc
 ```
 
-### 数据预处理
+### Data Preprocessing
+
 ```bash
-# 全时段
+# Full period
 python3 01_data_preprocessing_forward_comprehensive.py
 
-# 校准时段 (用于训练emulator)
+# Calibration period (for emulator training)
 python3 01_data_preprocessing_forward_comprehensive.py --calibration
 ```
 
-### 训练emulator
+### Train Emulator
+
 ```bash
 python3 02_train_forward_comprehensive.py
 ```
 
-### 参数校准
+### Parameter Calibration
+
 ```bash
-python3 06_calibration_applying_emulator_multiple_runs.py \
+python3 05_calibration_applying_emulator_multiple_runs.py \
     --model_dir results_forward_comprehensive/AttentionLSTM_xxx/ \
     --forcing data/raw/forcing/forcing_panama_daily_calibration.nc \
     --obs data/obs/Panama_BCI_obs_2015-07-30_2016-07-29.csv \
@@ -161,45 +169,48 @@ python3 06_calibration_applying_emulator_multiple_runs.py \
     --max_iter 100
 ```
 
-## 变量说明
+## Variable Description
 
-### Forcing变量 (8个)
-| 变量 | 描述 |
-|------|------|
-| T2D | 2m气温 (K) |
-| Q2D | 2m比湿 (kg/kg) |
-| PSFC | 地表气压 (Pa) |
-| U2D, V2D | 2m风速分量 (m/s) |
-| LWDOWN | 下行长波辐射 (W/m²) |
-| SWDOWN | 下行短波辐射 (W/m²) |
-| RAINRATE | 降水率 (mm/s) |
+### Forcing Variables (8)
 
-### 目标变量 (29个)
-- **能量平衡** (5): FSA, FIRA, HFX, LH, GRDFLX
-- **水通量** (5): ECAN, ETRAN, EDIR, UGDRNOFF_RATE, SFCRNOFF_RATE
-- **水储量** (5): SOIL_M (L1-L4), CANLIQ
-- **温度** (5): SOIL_T (L1-L2), TG, TV, TRAD
-- **能量分量** (9): SAV, SAG, IRC, IRG, SHC, SHG, EVC, EVG, GHV
+| Variable | Description                         |
+| -------- | ----------------------------------- |
+| T2D      | 2m air temperature (K)              |
+| Q2D      | 2m specific humidity (kg/kg)        |
+| PSFC     | Surface pressure (Pa)               |
+| U2D, V2D | 2m wind speed components (m/s)      |
+| LWDOWN   | Downward longwave radiation (W/m²)  |
+| SWDOWN   | Downward shortwave radiation (W/m²) |
+| RAINRATE | Precipitation rate (mm/s)           |
 
-### 校准参数 (9个)
-| 参数 | 描述 | 范围 |
-|------|------|------|
-| VCMX25 | 最大羧化速率 | [30, 120] |
-| HVT | 冠层顶高 | [9, 55] |
-| HVB | 冠层底高 | [0.1, 15] |
-| CWPVT | 冠层风参数 | [0.15, 5.35] |
-| Z0MVT | 动量粗糙度 | [0.3, 2] |
-| WLTSMC | 凋萎含水量 | [0.02, 0.26] |
-| REFSMC | 参考含水量 | [0.15, 0.45] |
-| MAXSMC | 饱和含水量 | [0.45, 0.75] |
-| SATDK | 饱和导水率 | [8.9e-6, 5e-4] |
+### Target Variables (29)
 
-## 模型配置
+- **Energy balance** (5): FSA, FIRA, HFX, LH, GRDFLX
+- **Water fluxes** (5): ECAN, ETRAN, EDIR, UGDRNOFF_RATE, SFCRNOFF_RATE
+- **Water storage** (5): SOIL_M (L1-L4), CANLIQ
+- **Temperature** (5): SOIL_T (L1-L2), TG, TV, TRAD
+- **Energy components** (9): SAV, SAG, IRC, IRG, SHC, SHG, EVC, EVG, GHV
 
-编辑 `config_forward_comprehensive.py`：
+### Calibration Parameters (9)
+
+| Parameter | Description                      | Range          |
+| --------- | -------------------------------- | -------------- |
+| VCMX25    | Maximum carboxylation rate       | [30, 120]      |
+| HVT       | Canopy top height                | [9, 55]        |
+| HVB       | Canopy bottom height             | [0.1, 15]      |
+| CWPVT     | Canopy wind parameter            | [0.15, 5.35]   |
+| Z0MVT     | Momentum roughness length        | [0.3, 2]       |
+| WLTSMC    | Wilting point soil moisture      | [0.02, 0.26]   |
+| REFSMC    | Reference soil moisture          | [0.15, 0.45]   |
+| MAXSMC    | Saturated soil moisture          | [0.45, 0.75]   |
+| SATDK     | Saturated hydraulic conductivity | [8.9e-6, 5e-4] |
+
+## Model Configuration
+
+Edit `config_forward_comprehensive.py`:
 
 ```python
-TEMPORAL_RESOLUTION = 'daily'  # 'daily' 或 '30min'
+TEMPORAL_RESOLUTION = 'daily'  # 'daily' or '30min'
 
 MODEL_CONFIG = {
     'model_type': 'AttentionLSTM',
@@ -216,60 +227,64 @@ TRAINING_CONFIG = {
 }
 ```
 
-## 文件结构
+## File Structure
 
 ```
-calibration-BCI/
-├── run_model_training.sh          # 模型训练工作流
-├── run_calibration.sh             # 校准工作流
-├── config_forward_comprehensive.py # 配置文件
+project/
+├── run_model_training.sh          # Model training workflow
+├── run_calibration.sh             # Calibration workflow
+├── config_forward_comprehensive.py # Configuration file
 │
-├── 数据准备
+├── Data Preparation
 │   ├── extract_forcing_data.py
 │   └── noahmp/TBL_generator/
 │       ├── generate_samples.py
 │       ├── noahmp_apply_samples.py
 │       └── value_bounds.csv
 │
-├── 训练
+├── Training
 │   ├── 01_data_preprocessing_forward_comprehensive.py
 │   └── 02_train_forward_comprehensive.py
 │
-├── 校准验证
-│   ├── 06_calibration_applying_emulator_multiple_runs.py
-│   ├── 07_calibration_validation_enhanced.py
-│   └── src/convert_calibrated_params.py
+├── Validation & Calibration
+│   ├── 05_calibration_applying_emulator_multiple_runs.py
+│   ├── 06_calibration_validation.py
+│   ├── 06_calibration_validation.sh
+│   ├── 07_importance_analysis.py
+│   ├── 07_importance_analysis.sh
+│   └── src/
+│       ├── convert_calibrated_params.py
+│       ├── convert_pso_obs.py
+│       ├── plot_validation_results.py
+│       └── plot_validation_scatter.py
 │
-└── 数据目录
-    ├── data/raw/forcing/          # forcing数据
-    ├── data/raw/sim_results/      # Noah-MP输出
-    ├── data/obs/                  # 观测数据
-    ├── calibration_results/       # 校准结果
-    └── validation_results/        # 验证结果
+└── Data Directories
+    ├── data/raw/forcing/          # Forcing data
+    ├── data/raw/sim_results/      # Noah-MP outputs
+    ├── data/obs/                  # Observation data
+    ├── calibration_results/       # Calibration results
+    └── validation_results/        # Validation results
 ```
 
-## 常见问题
+## FAQ
 
-**Q: 预处理时提示timesteps不匹配**
+**Q: Timestep mismatch during preprocessing**
+
 ```bash
-# 确保forcing数据覆盖Noah-MP输出的时间范围
+# Ensure forcing data covers the Noah-MP output time range
 python3 extract_forcing_data.py --daily \
     --start_date 2015-07-30 --end_date 2017-07-30 \
     --output data/raw/forcing/forcing_panama_daily_full.nc
 ```
 
-**Q: 训练时内存不足**
+**Q: Out of memory during training**
+
 ```python
-# 在config中减小batch_size或使用daily分辨率
+# Reduce batch_size in config or use daily resolution
 TRAINING_CONFIG = {'batch_size': 8}
 TEMPORAL_RESOLUTION = 'daily'
 ```
 
-**Q: 校准后SATDK值异常**
-```
-# 检查value_bounds.csv中是否同时有SATDK和SATDK(log)两行
-# 校准使用log bounds，转换时自动还原为物理值
-```
-
 ---
-**Last Updated:** 2024-12-18
+
+**Last Updated:** 2025-12-18

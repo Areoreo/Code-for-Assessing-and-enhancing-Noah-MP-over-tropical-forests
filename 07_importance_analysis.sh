@@ -9,11 +9,11 @@
 # 4. Analyze results and compute importance values
 #
 # Usage:
-#   bash 08_importance_analysis.sh                    # Full workflow (prepare + run + analyze)
-#   bash 08_importance_analysis.sh --prepare-only     # Only prepare directories
-#   bash 08_importance_analysis.sh --run-only         # Only run models (assumes prepared)
-#   bash 08_importance_analysis.sh --analyze-only     # Only analyze (assumes models ran)
-#   bash 08_importance_analysis.sh -n 4               # Run with 4 parallel jobs
+#   bash 07_importance_analysis.sh                    # Full workflow (prepare + run + analyze)
+#   bash 07_importance_analysis.sh --prepare-only     # Only prepare directories
+#   bash 07_importance_analysis.sh --run-only         # Only run models (assumes prepared)
+#   bash 07_importance_analysis.sh --analyze-only     # Only analyze (assumes models ran)
+#   bash 07_importance_analysis.sh -n 4               # Run with 4 parallel jobs
 #
 # Arguments:
 #   --method METHOD     Analysis method: 'oat' or 'shapley' (default: shapley)
@@ -34,7 +34,7 @@ set -e  # Exit on error
 
 BASE_DIR="/home/petrichor/ymwang/snap/Emulator-based_calibration/calibration-PSO"
 SRC_DIR="${BASE_DIR}/src"
-PYTHON_SCRIPT="${BASE_DIR}/08_importance_analysis.py"
+PYTHON_SCRIPT="${BASE_DIR}/07_importance_analysis.py"
 
 # Default settings
 METHOD="shapley"
@@ -194,8 +194,8 @@ if [ "$RUN_ONLY" = false ] && [ "$ANALYZE_ONLY" = false ]; then
         echo "  ${IMPORTANCE_DIR}"
         echo ""
         echo "Next steps:"
-        echo "  1. Run models: bash 08_importance_analysis.sh --run-only"
-        echo "  2. Analyze:    bash 08_importance_analysis.sh --analyze-only"
+        echo "  1. Run models: bash 07_importance_analysis.sh --run-only"
+        echo "  2. Analyze:    bash 07_importance_analysis.sh --analyze-only"
         exit 0
     fi
 fi
@@ -260,7 +260,7 @@ if [ "$PREPARE_ONLY" = false ] && [ "$ANALYZE_ONLY" = false ]; then
         echo "Model runs and conversions complete."
         echo ""
         echo "Next step:"
-        echo "  Analyze results: bash 08_importance_analysis.sh --analyze-only"
+        echo "  Analyze results: bash 07_importance_analysis.sh --analyze-only"
         exit 0
     fi
 fi
@@ -286,6 +286,6 @@ if [ "$PREPARE_ONLY" = false ] && [ "$RUN_ONLY" = false ]; then
     echo "  ${IMPORTANCE_DIR}/importance_*.csv"
     echo ""
     echo "To analyze different periods, run:"
-    echo "  python3 08_importance_analysis.py --mode analyze --method $METHOD --period calibration"
-    echo "  python3 08_importance_analysis.py --mode analyze --method $METHOD --period validation"
+    echo "  python3 07_importance_analysis.py --mode analyze --method $METHOD --period calibration"
+    echo "  python3 07_importance_analysis.py --mode analyze --method $METHOD --period validation"
 fi

@@ -30,8 +30,9 @@ from pathlib import Path
 from datetime import datetime, timedelta
 import sys
 
-# Add project directory to path for config import
-sys.path.insert(0, '/home/petrichor/ymwang/snap/Emulator-based_calibration/calibration-PSO')
+# Add project root directory to path for config import
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 import config_forward_comprehensive as config
 
 # Expected number of timesteps per day (30-min resolution)

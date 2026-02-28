@@ -19,13 +19,13 @@ Two methods are implemented:
 
 Usage:
     # Step 1: Generate parameter combinations and prepare run directories
-    python 08_importance_analysis.py --mode prepare --method shapley
+    python 07_importance_analysis.py --mode prepare --method shapley
 
     # Step 2: (Manual) Run Noah-MP for all combinations
-    bash 08_importance_analysis.sh
+    bash 07_importance_analysis.sh
 
     # Step 3: Analyze results and compute importance
-    python 08_importance_analysis.py --mode analyze --method shapley
+    python 07_importance_analysis.py --mode analyze --method shapley
 
 Author: Generated for ymwang
 Date: 2026-01-23
@@ -1626,7 +1626,7 @@ def generate_shell_script(
     with open(metadata_file, 'r') as f:
         metadata = json.load(f)
 
-    script_file = output_dir / "08_importance_analysis.sh"
+    script_file = output_dir / "07_importance_analysis.sh"
 
     with open(script_file, 'w') as f:
         f.write("#!/bin/bash\n")
@@ -1639,8 +1639,8 @@ def generate_shell_script(
         f.write("# Each run may take several minutes depending on the simulation period.\n")
         f.write("#\n")
         f.write("# Usage:\n")
-        f.write("#   bash 08_importance_analysis.sh          # Run all combinations\n")
-        f.write("#   bash 08_importance_analysis.sh -n 4     # Run with 4 parallel jobs\n")
+        f.write("#   bash 07_importance_analysis.sh          # Run all combinations\n")
+        f.write("#   bash 07_importance_analysis.sh -n 4     # Run with 4 parallel jobs\n")
         f.write("#\n\n")
 
         f.write("set -e\n\n")
@@ -1702,7 +1702,7 @@ def generate_shell_script(
         f.write("echo \"\"\n")
         f.write("echo \"All model runs completed.\"\n")
         f.write("echo \"Next step: Run analysis to compute importance values:\"\n")
-        f.write(f"echo \"  python 08_importance_analysis.py --mode analyze --method {method}\"\n")
+        f.write(f"echo \"  python 07_importance_analysis.py --mode analyze --method {method}\"\n")
 
     # Make script executable
     os.chmod(script_file, 0o755)
@@ -1722,16 +1722,16 @@ def main():
         epilog="""
 Examples:
   # Prepare OAT analysis (10 combinations with LAI)
-  python 08_importance_analysis.py --mode prepare --method oat
+  python 07_importance_analysis.py --mode prepare --method oat
 
   # Prepare Shapley analysis (512 combinations with LAI)
-  python 08_importance_analysis.py --mode prepare --method shapley
+  python 07_importance_analysis.py --mode prepare --method shapley
 
   # Analyze results after running models
-  python 08_importance_analysis.py --mode analyze --method shapley --period full
+  python 07_importance_analysis.py --mode analyze --method shapley --period full
 
   # Generate shell script only
-  python 08_importance_analysis.py --mode script --method shapley
+  python 07_importance_analysis.py --mode script --method shapley
         """
     )
 
