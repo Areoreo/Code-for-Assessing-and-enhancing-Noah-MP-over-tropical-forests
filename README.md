@@ -1,4 +1,4 @@
-# LSTM Emulator for Noah-MP Calibration
+# Code for "Assessing and enhancing Noah-MP land surface modeling over tropical forests using machine learning techniques"
 
 An LSTM neural network-based rapid parameter calibration system for the Noah-MP land surface model.
 
