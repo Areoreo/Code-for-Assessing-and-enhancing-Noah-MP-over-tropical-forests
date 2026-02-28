@@ -406,7 +406,7 @@ OUTPUT_WEIGHTS = {
     'ECAN': 2.0, 'ETRAN': 2.0, 'EDIR': 2.0,
     'UGDRNOFF_RATE': 2.0, 'SFCRNOFF_RATE': 2.0,
     # Water storage
-    'SOIL_M': 10.0, 'SOIL_M_L2': 1.5, 'SOIL_M_L3': 1.5, 'SOIL_M_L4': 1.5,
+    'SOIL_M': 20.0, 'SOIL_M_L2': 1.5, 'SOIL_M_L3': 1.5, 'SOIL_M_L4': 1.5,
     'CANLIQ': 1.0,
     # Temperature
     'SOIL_T': 1.5, 'SOIL_T_L2': 1.0, 'TG': 1.5, 'TV': 1.5, 'TRAD': 1.5,

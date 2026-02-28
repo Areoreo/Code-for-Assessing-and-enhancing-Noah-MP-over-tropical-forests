@@ -24,8 +24,13 @@ An LSTM neural network-based rapid parameter calibration system for the Noah-MP 
 
 ## Quick Start
 
+Before you start, some prerequisite should be set up first:
+
+- Prepare your observation data in this path './data/obs/'
+- './noahmp/point_run/hrldas.exe' may not be compiled to be able to run in your environment. Please compile and get your own hrldas.exe and replace './noahmp/point_run/hrldas.exe' with yours.
+
 ```bash
-cd /home/petrichor/ymwang/snap/Emulator-based_calibration/calibration-BCI
+cd $PROJECT_DIR
 
 # Full model training workflow
 bash run_model_training.sh --samples 1000 --parallel 4
@@ -214,8 +219,8 @@ TEMPORAL_RESOLUTION = 'daily'  # 'daily' or '30min'
 
 MODEL_CONFIG = {
     'model_type': 'AttentionLSTM',
-    'hidden_dim': 1536,
-    'num_layers': 3,
+    'hidden_dim': 1024,
+    'num_layers': 2,
     'dropout': 0.3,
 }
 
