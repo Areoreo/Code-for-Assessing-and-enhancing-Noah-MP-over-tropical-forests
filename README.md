@@ -199,17 +199,17 @@ python3 05_calibration_applying_emulator_multiple_runs.py \
 
 ### Calibration Parameters (9)
 
-| Parameter | Description                      | Range          |
-| --------- | -------------------------------- | -------------- |
-| VCMX25    | Maximum carboxylation rate       | [30, 120]      |
-| HVT       | Canopy top height                | [9, 55]        |
-| HVB       | Canopy bottom height             | [0.1, 15]      |
-| CWPVT     | Canopy wind parameter            | [0.15, 5.35]   |
-| Z0MVT     | Momentum roughness length        | [0.3, 2]       |
-| WLTSMC    | Wilting point soil moisture      | [0.02, 0.26]   |
-| REFSMC    | Reference soil moisture          | [0.15, 0.45]   |
-| MAXSMC    | Saturated soil moisture          | [0.45, 0.75]   |
-| SATDK     | Saturated hydraulic conductivity | [8.9e-6, 5e-4] |
+| Parameter | Description                      |
+| --------- | -------------------------------- |
+| VCMX25    | Maximum carboxylation rate       |
+| HVT       | Canopy top height                |
+| HVB       | Canopy bottom height             |
+| CWPVT     | Canopy wind parameter            |
+| Z0MVT     | Momentum roughness length        |
+| WLTSMC    | Wilting point soil moisture      |
+| REFSMC    | Reference soil moisture          |
+| MAXSMC    | Saturated soil moisture          |
+| SATDK     | Saturated hydraulic conductivity |
 
 ## Model Configuration
 
